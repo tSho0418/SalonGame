@@ -75,5 +75,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Gg]amedata.json
 /[Aa]ssets/[Gg]amedata.json.meta
 
-/[Aa]ssets/[Ii]mages/*
-/[Aa]ssets/[Ii]mages.meta
+/[Aa]ssets/[Ss]treamingAssets/[Ii]mages/*
+/[Aa]ssets/[Ss]treamingAssets/[Ii]mages.meta

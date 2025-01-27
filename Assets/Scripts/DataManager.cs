@@ -16,7 +16,7 @@ public class DataManager : MonoBehaviour
         // 各キャラクター情報をログに表示
         foreach (var gameData in gameDatum)
         {
-            Debug.Log(gameData.id);
+            
         }
     }
 }

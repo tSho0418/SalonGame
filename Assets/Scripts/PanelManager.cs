@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -13,6 +14,8 @@ public class PanelManager : MonoBehaviour
     private Vector3 rightOff = new Vector3(30f, 2f, 10f);
     private Vector3 leftOff = new Vector3(-30f, 2f, 10f);
 
+    private List<int> idState = new List<int>();
+
     [SerializeField] private GameObject panelPrefab;
 
     private GameObject centorPanel;
@@ -24,10 +27,22 @@ public class PanelManager : MonoBehaviour
     public float moveDuration = 0.01f;
     private float elapsedTime = 0f;
     private bool isMoving = false;
+
+    private string[] fullPath;
+    private Texture2D[] textures;
+
+    private int dataSize;
     // Start is called before the first frame update
     void Start()
     {
-       InitializePanel();
+        dataSize = DataManager.Instance.gameDatum.Length;
+        fullPath = new string[dataSize];
+        textures = new Texture2D[dataSize];
+        idState.Add(0);//左のオブジェクトのid初期化
+        idState.Add(1);//正面のオブジェクトのid初期化
+        idState.Add(2);//右のオブジェクトのid初期化
+        InitializePanel();
+        InitializeImages();
     }
 
     // Update is called once per frame
@@ -43,7 +58,8 @@ public class PanelManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space) && !isMoving)
         {
-            Debug.Log("select");
+            //正面のオブジェクトを選択
+            Debug.Log(DataManager.Instance.gameDatum[idState[1]].Title);
         }
     }
 
@@ -54,13 +70,26 @@ public class PanelManager : MonoBehaviour
         leftPanel = Instantiate(panelPrefab, leftPosition, Quaternion.identity);
     }
 
+    void InitializeImages()
+    {
+        for(int i = 0;i < dataSize; i++)
+        {
+            fullPath[i] = Path.Combine(Application.streamingAssetsPath, DataManager.Instance.gameDatum[i].imagePath);
+            textures[i] = LoadTexture(fullPath[i]);
+        }
+        leftPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[idState[0]];
+        centorPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[idState[1]];
+        rightPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[idState[2]];
+        
+    }
+
     private System.Collections.IEnumerator MoveRight()
     {
         isMoving = true;
 
         float elapsedTime = 0f; // 経過時間
         newLeftPanel = Instantiate(panelPrefab, rightOff, Quaternion.identity);
-
+        newLeftPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[NextLeft()];
         while (elapsedTime < moveDuration)
         {
             // 正規化された時間を計算（0 ～ 1）
@@ -92,7 +121,7 @@ public class PanelManager : MonoBehaviour
 
         float elapsedTime = 0f; // 経過時間
         newRightPanel = Instantiate(panelPrefab, leftOff, Quaternion.identity);
-
+        newRightPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[NextRight()];
         while (elapsedTime < moveDuration)
         {
             // 正規化された時間を計算（0 ～ 1）
@@ -117,4 +146,59 @@ public class PanelManager : MonoBehaviour
         newRightPanel = null;
         isMoving = false; // 移動終了
     }
+
+    Texture2D LoadTexture(string path)
+    {
+        if (!File.Exists(path))
+        {
+            Debug.LogError("ファイルが存在しません: " + path);
+            return null;
+        }
+
+        // ファイルをバイト配列として読み込む
+        byte[] fileData = File.ReadAllBytes(path);
+
+        // Texture2Dを作成
+        Texture2D texture = new Texture2D(2, 2); // 仮のサイズで初期化
+        if (texture.LoadImage(fileData))
+        {
+            return texture;
+        }
+
+        Debug.LogError("画像データのロードに失敗しました: " + path);
+        return null;
+    }
+
+    int NextLeft()
+    {
+        idState[2] = idState[1];
+        idState[1] = idState[0];
+        if (idState[0] == 0)//これ以上左にオブジェクトが存在しない場合
+        {
+            idState[0] = dataSize - 1;//最後尾に戻る
+
+        }
+        else
+        {
+            idState[0] = idState[0] - 1;
+        }
+
+        return idState[0];
+    }
+
+    int NextRight()
+    {
+        idState[0] = idState[1];
+        idState[1] = idState[2];
+        if (idState[2] == dataSize - 1)
+        {
+            idState[2] = 0;//先頭に戻る
+        }
+        else
+        {
+            idState[2] = idState[2] + 1;
+        }
+        return idState[2];
+    }
+
 }

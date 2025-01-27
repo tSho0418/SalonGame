@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonFile: {fileID: 4900000, guid: 2effe8c08baaf1e4eb93a698b9d0a65d, type: 3}
+  gameDatum: []
 --- !u!4 &848445380
 Transform:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 4871949941409545384, guid: 343abb112c7207d4085dfad33344cfd9, type: 3}
-  moveDuration: 2
+  moveDuration: 0.2
 --- !u!4 &1248869578
 Transform:
   m_ObjectHideFlags: 0

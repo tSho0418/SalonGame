@@ -384,6 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 4871949941409545384, guid: 343abb112c7207d4085dfad33344cfd9, type: 3}
+  moveDuration: 2
 --- !u!4 &1248869578
 Transform:
   m_ObjectHideFlags: 0
@@ -580,6 +581,6 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 848445380}
+  - {fileID: 1248869578}
   - {fileID: 1292646207}
   - {fileID: 1541429805}
-  - {fileID: 1248869578}

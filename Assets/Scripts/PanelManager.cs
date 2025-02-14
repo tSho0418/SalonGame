@@ -14,7 +14,7 @@ public class PanelManager : MonoBehaviour
     private Vector3 rightOff = new Vector3(30f, 2f, 10f);
     private Vector3 leftOff = new Vector3(-30f, 2f, 10f);
 
-    private List<int> idState = new List<int>();
+    private int[] idState = new int[3];
 
     [SerializeField] private GameObject panelPrefab;
 
@@ -32,15 +32,16 @@ public class PanelManager : MonoBehaviour
     private Texture2D[] textures;
 
     private int dataSize;
+    private NewId newId = new NewId();
     // Start is called before the first frame update
     void Start()
     {
         dataSize = DataManager.Instance.gameDatum.Length;
         fullPath = new string[dataSize];
         textures = new Texture2D[dataSize];
-        idState.Add(0);//左のオブジェクトのid初期化
-        idState.Add(1);//正面のオブジェクトのid初期化
-        idState.Add(2);//右のオブジェクトのid初期化
+        idState[0] = 0;//左のオブジェクトのid初期化
+        idState[1] = 1;//正面のオブジェクトのid初期化
+        idState[2] = 2;//右のオブジェクトのid初期化
         InitializePanel();
         InitializeImages();
     }
@@ -89,7 +90,7 @@ public class PanelManager : MonoBehaviour
 
         float elapsedTime = 0f; // 経過時間
         newLeftPanel = Instantiate(panelPrefab, rightOff, Quaternion.identity);
-        newLeftPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[NextLeft()];
+        newLeftPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[newId.GetNewLeftId(idState, dataSize)];
         while (elapsedTime < moveDuration)
         {
             // 正規化された時間を計算（0 ～ 1）
@@ -121,7 +122,7 @@ public class PanelManager : MonoBehaviour
 
         float elapsedTime = 0f; // 経過時間
         newRightPanel = Instantiate(panelPrefab, leftOff, Quaternion.identity);
-        newRightPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[NextRight()];
+        newRightPanel.gameObject.GetComponent<Renderer>().material.mainTexture = textures[newId.GetNewRightId(idState, dataSize)];
         while (elapsedTime < moveDuration)
         {
             // 正規化された時間を計算（0 ～ 1）
@@ -169,36 +170,6 @@ public class PanelManager : MonoBehaviour
         return null;
     }
 
-    int NextLeft()
-    {
-        idState[2] = idState[1];
-        idState[1] = idState[0];
-        if (idState[0] == 0)//これ以上左にオブジェクトが存在しない場合
-        {
-            idState[0] = dataSize - 1;//最後尾に戻る
-
-        }
-        else
-        {
-            idState[0] = idState[0] - 1;
-        }
-
-        return idState[0];
-    }
-
-    int NextRight()
-    {
-        idState[0] = idState[1];
-        idState[1] = idState[2];
-        if (idState[2] == dataSize - 1)
-        {
-            idState[2] = 0;//先頭に戻る
-        }
-        else
-        {
-            idState[2] = idState[2] + 1;
-        }
-        return idState[2];
-    }
+    
 
 }

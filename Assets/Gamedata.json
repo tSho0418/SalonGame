@@ -1,0 +1,7 @@
+{
+    "gameDatum": [
+        { "id": 0, "Title": "野球ゲーム", "creatorName": "Aさん", "sceneName": "Baseball", "imagePath": "Images/baseball.png"},
+        { "id": 1, "Title": "リズムゲーム", "creatorName": "Bさん", "sceneName": "Rhythm", "imagePath": "Images/music.png"},
+        { "id": 2, "Title": "豆まきゲーム", "creatorName": "Cさん", "sceneName": "Setsubun", "imagePath": "Images/setsubun.png"}
+    ]
+}

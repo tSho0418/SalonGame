@@ -384,7 +384,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e4d6cc6c3d3ae46b0203b7443abab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelPrefab: {fileID: 4871949941409545384, guid: 343abb112c7207d4085dfad33344cfd9, type: 3}
+  panelPrefab: {fileID: 6779823273864533040, guid: ce8a4203a52ab1d49afbfd34824e8de0, type: 3}
+  childPanelPrefab: {fileID: 1090578874279988630, guid: 71e4d535b9f41344a9f66f4ad6db595c, type: 3}
   moveDuration: 0.2
 --- !u!4 &1248869578
 Transform:
